@@ -1,5 +1,6 @@
 #include <iostream>
-#include <list>
+#include <stack>
+#include <algorithm>
 using namespace std;
 
 int main() {
@@ -9,34 +10,49 @@ int main() {
 
 	int t;
 	cin >> t;
-	while (t--) {
-		string in;
-		list<char> pw;
-		cin >> in;
-		list<char>::iterator it = pw.begin();
 
-		for (int i = 0; i < in.size(); i++) {
-			char cur = in[i];
-			if (cur == '<') {
-				if (it != pw.begin())
-					it--;
-			}
-			else if (cur == '>') {
-				if (it != pw.end())
-					it++;
-			}
-			else if (cur == '-') {
-				if (it != pw.begin()) {
-					it = pw.erase(--it);
+	while (t--) {
+		string str;
+		cin >> str;
+
+		stack<char> result;
+		stack<char> temp;
+
+		for (int i = 0; i < str.length(); i++) {
+			char current = str[i];
+
+			if (current == '<') {
+				if (!result.empty()) {
+					temp.push(result.top());
+					result.pop();
 				}
 			}
+			else if (current == '>') {
+				if (!temp.empty()) {
+					result.push(temp.top());
+					temp.pop();
+				}
+			}
+			else if (current == '-') {
+				if(!result.empty())
+					result.pop();
+			}
 			else {
-				pw.insert(it, cur);
+				result.push(current);
 			}
 		}
-		for (auto p : pw)
-			cout << p;
-		cout << '\n';
+		while (!temp.empty()) {
+			result.push(temp.top());
+			temp.pop();
+		}
+		string answer;
+
+		while (!result.empty()) {
+			answer += result.top();
+			result.pop();
+		}
+		reverse(answer.begin(), answer.end());
+		cout << answer << '\n';
 	}
 	return 0;
 }
