@@ -1,34 +1,42 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 using namespace std;
 
 int main() {
-	vector<int> v(8);
-
+	vector<int> melody(8);
+	vector<int> temp;
 	for (int i = 0; i < 8; i++)
-		cin >> v[i];
+		cin >> melody[i];
 
-	int first = v[0];
-	int flag = 0;
+	temp = melody;
+	sort(temp.begin(), temp.end());
 
-	for (int i = 1; i < 8; i++) {
-		if (first == 1 && v[i] != first + i) {
-			cout << "mixed" << '\n';
-			flag = 1;
-			break;
-		}
-		else if (first == 8 && v[i] != first - i) {
-			cout << "mixed" << '\n';
-			flag = 1;
+	bool find = true;
+	for (int i = 0; i < 8; i++) {
+		if (melody[i] != temp[i]) {
+			find = false;
 			break;
 		}
 	}
 
-	if (flag == 0) {
-		if (first == 1)
-			cout << "ascending" << '\n';
-		else
+	if (!find) {
+		find = true;
+		reverse(temp.begin(), temp.end());
+		for (int i = 0; i < 8; i++) {
+			if (melody[i] != temp[i]) {
+				find = false;
+				break;
+			}
+		}
+
+		if (find)
 			cout << "descending" << '\n';
+		else
+			cout << "mixed" << '\n';
+	}
+	else {
+		cout << "ascending" << '\n';
 	}
 	return 0;
 }
