@@ -1,39 +1,39 @@
 import sys
+from itertools import combinations
 
 n = int(sys.stdin.readline().rstrip())
-board = []
+board = []  # 복도 저장 리스트
+cand = []  # 빈 공간 저장할 리스트
+teachers = []  # 선생님들 위치를 저장할 리스트
+
 for i in range(n):
     board.append(list(sys.stdin.readline().rstrip().split()))
-
-dx = [-1, 0, 1, 0]
-dy = [0, -1, 0, 1]
-answer = 0
-
-cand = []
-teachers = []
-
-for i in range(n):
     for j in range(n):
         if board[i][j] == 'X':
             cand.append((j, i))
         elif board[i][j] == 'T':
             teachers.append((j, i))
 
+dx = [-1, 0, 1, 0]
+dy = [0, -1, 0, 1]
+answer = 0
 
-def dfs(idx, count):
-    if count == 3:
+
+# 빈 공간 3개를 선택해 장애물을 설치
+def set_obstacles():
+    for obs in combinations(cand, 3):
+        for x, y in obs:
+            board[y][x] = 'O'
+
         global answer
         answer += check()
-        return
+        if answer > 0: break
 
-    for i in range(idx + 1, len(cand)):
-        x = cand[i][0]
-        y = cand[i][1]
-        board[y][x] = 'O'
-        dfs(i, count + 1)
-        board[y][x] = 'X'
+        for x, y in obs:
+            board[y][x] = 'X'
 
 
+# 감시를 피할 수 있는지 체크하는 함수
 def check():
     for t in teachers:
         for i in range(4):
@@ -49,7 +49,7 @@ def check():
     return 1
 
 
-dfs(-1, 0)
+set_obstacles()
 
 if answer == 0:
     print('NO')
