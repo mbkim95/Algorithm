@@ -1,50 +1,63 @@
 #include <iostream>
+#include <vector>
+#include <queue>
 #include <algorithm>
-#include <cstring>
 using namespace std;
 
-int n;
-int t[1001], dp[1001];
-int r[1001][1001];
+int n, k, w;
+vector<int> d, in_degree, dp;
+vector<vector<int>> adj;
 
-void reset() {
-	memset(dp, -1, sizeof(dp));
-	memset(r, 0, sizeof(r));
-}
-
-int solve(int cur) {
-	int& ret = dp[cur];
-
-	if (ret != -1)
-		return ret;
-
-	int time = 0;
-
+int topological_sort() {
+	queue<int> q;
 	for (int i = 1; i <= n; i++) {
-		if (r[i][cur]) {
-			time = max(time, solve(i));
+		if (in_degree[i] == 0) {
+			q.push(i);
+			dp[i] = d[i];
 		}
 	}
-	return ret = t[cur] + time;
+
+	while (!q.empty()) {
+		int cur = q.front();
+		q.pop();
+
+		if (cur == w) break;
+
+		for (int next : adj[cur]) {
+			in_degree[next]--;
+			dp[next] = max(dp[next], dp[cur] + d[next]);
+			if (in_degree[next] == 0) {
+				q.push(next);
+			}
+		}
+	}
+	return dp[w];
 }
 
 int main() {
-	int c, k, w;
-	cin >> c;
-	while (c--) {
-		reset();
-		scanf("%d %d", &n, &k);
-		for (int i = 1; i <= n; i++) {
-			scanf("%d", &t[i]);
-		}
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
 
-		for (int i = 1; i <= k; i++) {
-			int tmp1, tmp2;
-			scanf("%d %d", &tmp1, &tmp2);
-			r[tmp1][tmp2] = 1;
+	int t;
+	cin >> t;
+	while (t--) {
+		cin >> n >> k;
+		d = vector<int>(n + 1);
+		in_degree = vector<int>(n + 1, 0);
+		dp = vector<int>(n + 1, 0);
+		adj = vector<vector<int>>(n + 1);
+
+		for (int i = 1; i <= n; i++)
+			cin >> d[i];
+
+		while (k--) {
+			int a, b;
+			cin >> a >> b;
+			adj[a].push_back(b);
+			in_degree[b]++;
 		}
-		scanf("%d", &w);
-		printf("%d\n", solve(w));
+		cin >> w;
+		cout << topological_sort() << '\n';
 	}
 	return 0;
 }
