@@ -1,56 +1,32 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <cmath>
+#define MAX 10000
 using namespace std;
 
-int n;
-vector<bool> prime;
-vector<int> v;
+vector<bool> is_prime;
 
 void precalc() {
-	prime = vector<bool>(10001, true);
-	prime[0] = prime[1] = false;
-	for (int i = 2; i*i <= 10000; i++) {
-		if (prime[i]) {
-			for (int j = i * i; j <= 10000; j += i)
-				prime[j] = false;
-		}
-	}
-
-	for (int i = 0; i < 10000; i++) {
-		if (prime[i])
-			v.push_back(i);
-	}
-}
-
-void solve() {
-	int diff = n;
-	int a, b;
-	for (int i = 0; i < v.size(); i++) {
-		if (binary_search(v.begin(), v.end(), n - v[i])) {
-			if (diff > abs(n - v[i] * 2)) {
-				diff = abs(n - v[i] * 2);
-				a = v[i];
-				b = n - v[i];
-			}
-		}
-	}
-	if (a > b) {
-		int tmp = b;
-		b = a;
-		a = tmp;
-	}
-	cout << a << ' ' << b << '\n';
+  is_prime = vector<bool>(MAX + 1, true);
+  is_prime[1] = false;
+  for (int i = 2; i * i <= MAX; i++) {
+    if (!is_prime[i]) continue;
+    for (int j = 2; i * j <= MAX; j++) is_prime[i * j] = false;
+  }
 }
 
 int main() {
-	int t;
-	cin >> t;
-	precalc();
-	while (t--) {
-		cin >> n;
-		solve();
-	}
-	return 0;
+  precalc();
+  int t;
+  cin >> t;
+  while(t--){
+    int tmp;
+    cin >> tmp;
+    for(int i=tmp/2; i>=2; i--){
+      if(is_prime[i] && is_prime[tmp-i]){
+        cout << i << ' ' << tmp-i << '\n';
+        break;
+      }
+    }
+  }
+  return 0;
 }
