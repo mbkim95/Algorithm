@@ -1,26 +1,23 @@
 #include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-	int num;
-	cin >> num;
-	int ans = 0;
-	for (int i = 1; i <= 1000000; i++) {
-		int tmp = i, sum = i;
-		vector<int> v;
-		while (tmp) {
-			v.push_back(tmp % 10);
-			tmp = tmp / 10;
-		}
-		for (auto x : v) {
-			sum += x;
-		}
-		if (sum == num) {
-			ans = i;
-			break;
-		}
-	}
-	cout << ans << '\n';
-	return 0;
+  int n;
+  cin >> n;
+  bool find = false;
+  for(int i=1; i<=1000000; i++){
+	  int tmp = i;
+	  int sum = i;
+	  while(tmp > 0){
+		  sum += tmp % 10;
+		  tmp /= 10;
+	  }
+	  if(sum == n) {
+		  cout << i << '\n';
+		  find = true;
+		  break;
+	  }
+  }
+  if(!find) cout << "0\n";
+  return 0;
 }
