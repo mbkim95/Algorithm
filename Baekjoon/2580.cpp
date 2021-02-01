@@ -3,7 +3,7 @@
 using namespace std;
 
 int sudoku[9][9];
-vector<pair<int, int>> v;
+vector<pair<int, int> > v;
 
 bool checkVertical(int x, int num) {
 	for (int i = 0; i < 9; i++) {
@@ -67,16 +67,6 @@ int main() {
 				v.push_back(make_pair(j, i));
 		}
 	}
-
-	for (int i = 1; i <= 9; i++) {
-		int x = v[0].first;
-		int y = v[0].second;
-
-		if (checkVertical(x, i) && checkHorizontal(y, i) && checkSquare(x, y, i)) {
-			sudoku[y][x] = i;
-			dfs(1);
-			sudoku[y][x] = 0;
-		}
-	}
+	dfs(0);
 	return 0;
 }
