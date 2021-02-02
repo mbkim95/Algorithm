@@ -1,67 +1,37 @@
 #include <iostream>
+#include <climits>
 #include <algorithm>
-#include <vector>
 using namespace std;
 
-int n, maxv, minv;
-vector<int> num, op;
+int n, a[101], max_ans = -INT_MAX, min_ans = INT_MAX;
+int op[4];
 
-int getResult(int a, int b, int operation) {
-	int ret;
-	if (operation == 0) {
-		ret = a + b;
-	}
-	else if (operation == 1) {
-		ret = a - b;
-	}
-	else if (operation == 2) {
-		ret = a * b;
-	}
-	else {
-		ret = a / b;
-	}
-	return ret;
-}
-
-void dfs(int result, int operation, int num_idx) {
-	result = getResult(result, num[num_idx], operation);
-	if (num_idx == n - 1) {
-		maxv = max(maxv, result);
-		minv = min(minv, result);
+void dfs(int idx, int ret){
+	if(idx == n){
+		max_ans = max(max_ans, ret);
+		min_ans = min(min_ans, ret);
 		return;
 	}
-
-	for (int i = 0; i < 4; i++) {
-		if (op[i] != 0) {
+	
+	for(int i=0; i<4; i++){
+		if(op[i] > 0){
 			op[i]--;
-			dfs(result, i, num_idx + 1);
-			op[i]++;
-		}
-	}
-}
-
-void solve() {
-	for (int i = 0; i < 4; i++) {
-		if (op[i] != 0) {
-			op[i]--;
-			dfs(num[0], i, 1);
+			int next = ret;
+			if(i == 0) next += a[idx];
+			if(i == 1) next-= a[idx];
+			if(i == 2) next *= a[idx];
+			if(i == 3) next /= a[idx];
+			dfs(idx+1, next);
 			op[i]++;
 		}
 	}
 }
 
 int main() {
-	cin >> n;
-	num = vector<int>(n);
-	op = vector<int>(n - 1);
-	for (int i = 0; i < n; i++) 
-		cin >> num[i];
-	
-	for (int i = 0; i < 4; i++)
-		cin >> op[i];
-	maxv = -1000000001;
-	minv = 1000000001;
-	solve();
-	cout << maxv << '\n' << minv << '\n';
-	return 0;
+  cin >> n;
+  for (int i = 0; i < n; i++) cin >> a[i];
+  for (int i = 0; i < 4; i++) cin >> op[i];
+  dfs(1, a[0]);
+  cout << max_ans << '\n' << min_ans << '\n';
+  return 0;
 }
