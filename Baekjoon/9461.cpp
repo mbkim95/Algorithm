@@ -1,23 +1,18 @@
 #include <iostream>
 using namespace std;
 
-int n;
-long t[101];
+long long dp[101];
 
-int main() {
-	int c;
-	cin >> c;
-	
-	t[1] = t[2] = t[3] = 1;
-	t[4] = t[5] = 2;
+int main(){
+  int t;
+  cin >> t;
 
-	while (c--) {
-		cin >> n;
-
-		for (int i = 6; i <= n; i++) {
-			t[i] = t[i - 1] + t[i - 5];
-		}
-
-		cout << t[n] << endl;
-	}
+  dp[1] = dp[2] = dp[3] = 1;
+  for(int i=4; i<=100; i++) dp[i] = dp[i-2] + dp[i-3];
+  while(t--){
+    int n;
+    cin >> n;
+    cout << dp[n] << '\n';
+  }
+  return 0;
 }
