@@ -1,33 +1,17 @@
 #include <iostream>
 #include <algorithm>
-#include <cstring>
 using namespace std;
 
-int n, dp[10000001];
-
-int solve(int num) {
-	if (num == 1)
-		return 0;
-
-	int& ret = dp[num];
-
-	if (ret != -1)
-		return ret;
-
-	ret = 987654321;
-
-	if (num % 3 == 0)
-		ret = min(ret, solve(num / 3) + 1);
-
-	if (num % 2 == 0)
-		ret = min(ret, solve(num / 2) + 1);
-
-	ret = min(ret, solve(num - 1) + 1);
-	return ret;
-}
+int dp[1000001];
 
 int main() {
-	cin >> n;
-	memset(dp, -1, sizeof(dp));
-	cout << solve(n) << '\n';
+  int n;
+  cin >> n;
+  for (int i = n - 1; i >= 1; i--) {
+    dp[i] = dp[i + 1] + 1;
+    if (i * 2 <= n) dp[i] = min(dp[i], dp[i * 2] + 1);
+    if (i * 3 <= n) dp[i] = min(dp[i], dp[i * 3] + 1);
+  }
+  cout << dp[1] << '\n';
+  return 0;
 }
