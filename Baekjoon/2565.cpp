@@ -3,40 +3,26 @@
 #include <algorithm>
 using namespace std;
 
-int n;
-
-int dp(int idx, vector<pair<int, int>>& v, vector<int>& cache) {
-	int& ret = cache[idx];
-
-	if (ret != -1)
-		return ret;
-	
-	ret = 1;
-
-	for (int i = idx + 1; i < n; i++) {
-		if (v[idx].second < v[i].second)
-			ret = max(ret, dp(i, v, cache) + 1);
-	}
-	return ret;
-}
+int n, dp[101];
+vector<pair<int, int> > line;
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	cin >> n;
-	vector<pair<int, int>> v;
-	vector<int> cache(n, -1);
-	for (int i = 0; i < n; i++) {
-		int tmp1, tmp2;
-		cin >> tmp1 >> tmp2;
-		v.push_back(make_pair(tmp1, tmp2));
-	}
-	sort(v.begin(), v.end());
-	int ans = 0;
-	for (int i = 0; i < n; i++) {
-		ans = max(ans, dp(i, v, cache));
-	}
-	cout << n - ans << '\n';
-	return 0;
+  cin >> n;
+  for (int i = 0; i < n; i++) {
+    int l, r;
+    cin >> l >> r;
+    line.push_back(make_pair(l, r));
+  }
+  sort(line.begin(), line.end());
+  int cnt = 0;
+  dp[0] = 1;
+  for (int i = 1; i < n; i++) {
+    dp[i] = 1;
+    for (int j = 0; j < i; j++)
+      if (line[i].second > line[j].second && dp[i] < dp[j] + 1)
+        dp[i] = dp[j] + 1;
+    cnt = max(cnt, dp[i]);
+  }
+  cout << n - cnt << '\n';
+  return 0;
 }
