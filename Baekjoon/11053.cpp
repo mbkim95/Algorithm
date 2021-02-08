@@ -1,36 +1,20 @@
 #include <iostream>
-#include <cstring>
-#include <algorithm>
 using namespace std;
 
-int n;
-int arr[1001], dp[1001];
-
-int solve(int cur) {
-	int& ret = dp[cur];
-
-	if (ret != -1)
-		return ret;
-
-	ret = 1;
-
-	for (int i = cur + 1; i < n; i++) {
-		if (arr[cur] < arr[i])
-			ret = max(ret, solve(i) + 1);
-	}
-	return ret;
-}
+int n, num[1001], dp[1001];
 
 int main() {
-	cin >> n;
-
-	for (int i = 0; i < n; i++)
-		cin >> arr[i];
-	memset(dp, -1, sizeof(dp));
-	int ans = 0;
-
-	for (int i = 0; i < n; i++) {
-		ans = max(ans, solve(i));
-	}
-	cout << ans << endl;
+  cin >> n;
+  for (int i = 0; i < n; i++) cin >> num[i];
+  int ans = 1;
+  dp[0] = 1;
+  for (int i = 1; i < n; i++) {
+    dp[i] = 1;
+    for (int j = 0; j < i; j++) {
+      if (num[i] > num[j] && dp[i] < dp[j] + 1) dp[i] = dp[j] + 1;
+    }
+    ans = max(ans, dp[i]);
+  }
+  cout << ans << '\n';
+  return 0;
 }
