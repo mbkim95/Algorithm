@@ -1,42 +1,31 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <vector>
 using namespace std;
 
-int n;
-vector<int> v;
+int n, num[101];
+vector<int> ans;
 
-int gcd(int p, int q) {
-	if (q == 0) 
-		return p;
-	return gcd(q, p % q);
+int gcd(int a, int b) {
+  if (b == 0) return a;
+  return gcd(b, a % b);
 }
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	cin >> n;
-	v = vector<int>(n);
-	for (int i = 0; i < n; i++)
-		cin >> v[i];
-	sort(v.begin(), v.end());
-	int g = v[1] - v[0];
-	for (int i = 2; i < n; i++) {
-		g = gcd(g, v[i] - v[i - 1]);
-	}
-	vector<int> ans;
-	for (int i = 2; i*i <= g; i++) {
-		if (g % i == 0) {
-			ans.push_back(i);
-			if (i != g / i)
-				ans.push_back(g / i);
-		}
-	}
-	ans.push_back(g);
-	sort(ans.begin(), ans.end());
-	for (int i = 0; i < ans.size(); i++) 
-		cout << ans[i] << ' ';
-	cout << '\n';
-	return 0;
+  cin >> n;
+  for (int i = 0; i < n; i++) cin >> num[i];
+  sort(num, num + n);
+
+  int g = num[1] - num[0];
+  for (int i = 2; i < n; i++) g = gcd(g, num[i] - num[i - 1]);
+  for (int i = 2; i * i <= g; i++)
+    if (g % i == 0) {
+      if (g / i != i) ans.push_back(g / i);
+      ans.push_back(i);
+    }
+  ans.push_back(g);
+  sort(ans.begin(), ans.end());
+  for (int i = 0; i < ans.size(); i++) cout << ans[i] << ' ';
+  cout << '\n';
+  return 0;
 }
