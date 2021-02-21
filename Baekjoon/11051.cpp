@@ -1,21 +1,16 @@
 #include <iostream>
-#define MOD 10007
 using namespace std;
 
 int n, k, dp[1001][1001];
 
+int comb(int n, int k){
+  if(k == 0 || n == k) return 1;
+  if(dp[n][k] != 0) return dp[n][k];
+  return dp[n][k] = (comb(n-1, k-1) + comb(n-1, k)) % 10007;
+}
+
 int main() {
-	cin >> n >> k;
-
-	for (int i = 1; i <= n; i++) {
-		dp[i][0] = 1;
-		dp[i][i] = 1;
-	}
-
-	for (int i = 2; i <= n; i++) {
-		for (int j = 1; j <= k; j++) {
-			dp[i][j] = (dp[i-1][j-1] + dp[i - 1][j]) % MOD;
-		}
-	}
-	cout << dp[n][k] << endl;
+  cin >> n >> k;
+  cout << comb(n, k) << '\n';
+  return 0;
 }
