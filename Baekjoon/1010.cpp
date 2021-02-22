@@ -1,35 +1,21 @@
 #include <iostream>
-#include <algorithm>
-#include <cstring>
 using namespace std;
 
-int c[31][31];
+int n, k, dp[31][31];
 
-int dp(int n, int m) {
-	int& ret = c[m][n];
-
-	if (ret != -1)
-		return ret;
-
-	if (m == 1 || n == m || n == 0) {
-		ret = 1;
-		return ret;
-	}
-	ret = dp(n - 1, m - 1) + dp(n, m - 1);
-	return ret;
+int comb(int n, int k) {
+  if (k == 0 || n == k) return 1;
+  if (dp[n][k] != 0) return dp[n][k];
+  return dp[n][k] = (comb(n - 1, k - 1) + comb(n - 1, k));
 }
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int t;
-	cin >> t;
-	memset(c, -1, sizeof(c));
-	while (t--) {
-		int a, b;
-		cin >> a >> b;
-		cout << dp(a, b) << '\n';
-	}
-	return 0;
+  int t;
+  cin >> t;
+
+  while (t--) {
+    cin >> k >> n;
+    cout << comb(n, k) << '\n';
+  }
+  return 0;
 }
