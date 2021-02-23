@@ -1,26 +1,21 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 using namespace std;
 
 int main() {
-	int n;
-	cin >> n;
-	int two = 0;
-	int five = 0;
-	int ans = 0;
-	for (int i = n; i >= 2; i--) {
-		int num = i;
-		while (num % 2 == 0) {
-			num /= 2;
-			two++;
-		}
-		num = i;
-		while (num % 5 == 0) {
-			num /= 5;
-			five++;
-		}
-	}
-	ans = min(two, five);
-	cout << ans << '\n';
-	return 0;
+  int n, t = 0, f = 0;
+  cin >> n;
+  for (int i = 2; i <= n; i++) {
+    int num = i;
+    while (num % 2 == 0) {
+      t++;
+      num /= 2;
+    }
+    while (num % 5 == 0) {
+      f++;
+      num /= 5;
+    }
+  }
+  cout << min(t, f) << '\n';
+  return 0;
 }
