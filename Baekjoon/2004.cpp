@@ -2,22 +2,19 @@
 #include <algorithm>
 using namespace std;
 
-pair<long long, long long> getTwoFive(long long num) {
-	long long two = 0, five = 0;
+int n, m;
+long long t, f;
 
-	for (long long i = 2; i <= num; i *= 2)
-		two += num / i;
-	for (long long i = 5; i <= num; i *= 5)
-		five += num / i;
-	return make_pair(two, five);
+void calculate(int num, int v) {
+  for (long long i = 2; i <= num; i *= 2) t += (num / i) * v;
+  for (long long i = 5; i <= num; i *= 5) f += (num / i) * v;
 }
 
 int main() {
-	long long n, m;
-	cin >> n >> m;
-	pair<long long, long long> p1 = getTwoFive(n);
-	pair<long long, long long> p2 = getTwoFive(n - m);
-	pair<long long, long long> p3 = getTwoFive(m);
-	cout << min(p1.first - p2.first - p3.first, p1.second - p2.second - p3.second) << '\n';
-	return 0;
+  cin >> n >> m;
+  calculate(n, 1);
+  calculate(n - m, -1);
+  calculate(m, -1);
+  cout << min(t, f) << '\n';
+  return 0;
 }
