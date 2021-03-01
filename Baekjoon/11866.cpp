@@ -2,22 +2,21 @@
 #include <queue>
 using namespace std;
 
+int n, k;
+queue<int> q;
+
 int main() {
-	int n, k;
 	cin >> n >> k;
-	deque<int> dq;
-	for (int i = 1; i <= n; i++) 
-		dq.push_back(i);
-	
-	cout << '<';
-	while (dq.size() != 1) {
-		for (int i = 0; i < k-1; i++) {
-			dq.push_back(dq.front());
-			dq.pop_front();
+	for (int i = 1; i <= n; i++) q.push(i);
+	cout << "<";
+	while (q.size() > 1) {
+		for (int i = 0; i < k - 1; i++) {
+			q.push(q.front());
+			q.pop();
 		}
-		cout << dq.front() << ", ";
-		dq.pop_front();
+		cout << q.front() << ", ";
+		q.pop();
 	}
-	cout << dq.front() << ">\n";
+	cout << q.front() << ">\n";
 	return 0;
 }
