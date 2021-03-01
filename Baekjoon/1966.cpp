@@ -1,41 +1,42 @@
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <algorithm>
+#include <cstring>
 using namespace std;
 
-int n, m;
-queue<pair<int, int>> q;
-vector<int> v;
+int n, m, p[11];
+
+bool canPop(int v) {
+	for (int i = 10; i > v; i--)
+		if (p[i] > 0) return false;
+	return true;
+}
 
 int main() {
 	int t;
 	cin >> t;
 	while (t--) {
+		queue<pair<int, int>> q;
+		memset(p, 0, sizeof(p));
 		cin >> n >> m;
-		q = queue < pair<int, int>>();
-		v.clear();
 		for (int i = 0; i < n; i++) {
 			int tmp;
 			cin >> tmp;
-			q.push(make_pair(tmp, i));
-			v.push_back(tmp);
+			p[tmp]++;
+			q.push({ i, tmp });
 		}
-		sort(v.begin(), v.end());
 		int cnt = 0;
 		while (true) {
 			pair<int, int> tmp = q.front();
-			q.pop();			
-			if (v[v.size() - 1] == tmp.first) {
+			q.pop();
+
+			if (canPop(tmp.second)) {
 				cnt++;
-				v.pop_back();
-				if (tmp.second == m)
-					break;
+				p[tmp.second]--;
+				if (tmp.first == m) break;
 			}
-			else {
-				q.push(tmp);
-			}
+			else q.push(tmp);		
 		}
 		cout << cnt << '\n';
 	}
+	return 0;
 }
