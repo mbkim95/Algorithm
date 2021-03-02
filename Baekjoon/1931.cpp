@@ -1,37 +1,36 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
-struct Time {
-	int s, e;
-};
+int n, ans;
+vector<pair<int, int>> v;
 
-bool cmpTime(const Time &a, const Time &b) {
-	if (a.e == b.e)
-		return a.s < b.s;
-	return a.e < b.e;
+bool cmp(pair<int, int>& a, pair<int, int>& b) {
+	if (a.second == b.second) return a.first < b.first;
+	return a.second < b.second;
 }
 
 int main() {
-	vector<Time> v;
-	Time t;
-	int n;
 	cin >> n;
 	for (int i = 0; i < n; i++) {
-		cin >> t.s >> t.e;
-		v.push_back(t);
+		int s, e;
+		cin >> s >> e;
+		v.push_back({ s, e });
 	}
-	
-	sort(v.begin(), v.end() , cmpTime);
 
-	int end = 0, cnt = 0;;
+	sort(v.begin(), v.end(), cmp);
+
+	int min_time = 0;
 
 	for (int i = 0; i < n; i++) {
-		if (end <= v[i].s) {
-			end = v[i].e;
-			cnt++;
+		int s = v[i].first;
+		int e = v[i].second;
+		if (s >= min_time) {
+			min_time = e;
+			ans++;
 		}
 	}
-	cout << cnt << endl;
+	cout << ans << '\n';
+	return 0;
 }
