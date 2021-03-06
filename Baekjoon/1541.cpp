@@ -1,36 +1,55 @@
 #include <iostream>
-#include <string>
-#include <algorithm>
 using namespace std;
 
-string str;
-
-int solve() {
-	string tmp = "";
-	int ans = 0;
-	bool minus = false;
-	for (int i = 0; i <= str.length(); i++) {
-		if (str[i] == '+' || str[i] == '-' || str[i] == '\0') {
-			if (minus) 
-				ans -= stoi(tmp);
-			else
-				ans += stoi(tmp);
-			tmp = "";
-			if (str[i] == '-')
-				minus = true;
-		}
-		else {
-			tmp += str[i];
-		}
-	}
-	return ans;
-}
+int num[50];
+bool under[50];
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	cin >> str;
-	cout << solve() << '\n';
-	return 0;
+  string str;
+  cin >> str;
+
+  string tmp = "";
+  int idx = 0;
+  for (char c : str) {
+    if (c == '+' || c == '-') {
+      int number = stoi(tmp);
+      num[idx] = number;
+      if (c == '-') under[idx + 1] = true;
+      idx++;
+      tmp = "";
+      continue;
+    }
+    tmp += c;
+  }
+  int number = stoi(tmp);
+  num[idx] = number;
+  idx++;
+
+  int index = 0;
+  for (int i = 0; i < idx; i++) {
+    if (under[i]) {
+      int sum = 0;
+      for (int j = index; j < i; j++) {
+        sum += num[j];
+        num[j] = 0;
+      }
+      num[index] = sum;
+      index = i;
+    }
+  }
+  int sum = 0;
+  for (int j = index; j < idx; j++) {
+    sum += num[j];
+    num[j] = 0;
+  }
+  num[index] = sum;
+
+  int ans = 0;
+  for (int i = 0; i < idx; i++)
+    if (under[i])
+      ans -= num[i];
+    else
+      ans += num[i];
+  cout << ans << '\n';
+  return 0;
 }
