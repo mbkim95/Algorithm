@@ -1,80 +1,66 @@
+#include <deque>
 #include <iostream>
-#include <queue>
-#include <string>
 using namespace std;
 
+int n;
+string cmd, number;
+
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
 
-	int t;
-	cin >> t;
+  int t;
+  cin >> t;
 
-	while (t--) {
-		string cmd;
-		int n;
-		string num;
-		deque<int> q;
-		cin >> cmd;
-		cin >> n;
-		cin >> num;
+  while (t--) {
+    cin >> cmd >> n >> number;
+    deque<int> dq;
+    number = number.substr(1, number.size() - 2);
 
-		string tmp;
-		for (int i = 0; i < num.length(); i++) {
-			if (num[i] == '[') continue;
-			else if ('0' <= num[i] && num[i] <= '9') {
-				tmp += num[i];
-			}
-			else {
-				if (!tmp.empty()) {
-					q.push_back(stoi(tmp));
-					tmp.clear();
-				}
-			}
-		}
+    int tmp = 0;
+    for (char c : number) {
+      if (c == ',') {
+        dq.push_back(tmp);
+        tmp = 0;
+        continue;
+      }
+      tmp = 10 * tmp + (c - '0');
+    }
+    if (tmp != 0) dq.push_back(tmp);
 
-		bool r = false;
-		bool err = false;
+    bool isPossible = true;
+    bool reverse = false;
+    for (char c : cmd) {
+      if (c == 'R')
+        reverse = !reverse;
+      else {
+        if (dq.empty()) {
+          isPossible = false;
+          break;
+        }
+        if (reverse)
+          dq.pop_back();
+        else
+          dq.pop_front();
+      }
+    }
 
-		for (int i = 0; i < cmd.length(); i++) {
-			if (cmd[i] == 'R') {
-				r = !r;
-			}
-			else if (cmd[i] == 'D') {
-				if (q.empty()) {
-					err = true;
-					break;
-				}
-				if (r == true)
-					q.pop_back();
-				else
-					q.pop_front();
-			}
-		}
-
-		if (err) {
-			cout << "error\n";
-			continue;
-		}
-		cout << '[';
-		if (r == true) {
-			while (!q.empty()) {
-				cout << q.back();
-				q.pop_back();
-				if (q.size() != 0)
-					cout << ',';
-			}
-		}
-		else {
-			while (!q.empty()) {
-				cout << q.front();
-				q.pop_front();
-				if (q.size() != 0)
-					cout << ',';
-			}
-		}
-		cout << "]\n";
-	}
-	return 0;
+    if (!isPossible)
+      cout << "error\n";
+    else {
+      cout << '[';
+      while (dq.size() > 1) {
+        if (reverse) {
+          cout << dq.back() << ',';
+          dq.pop_back();
+        } else {
+          cout << dq.front() << ',';
+          dq.pop_front();
+        }
+      }
+      if (dq.size() != 0) cout << dq.front();
+      cout << "]\n";
+    }
+  }
+  return 0;
 }
