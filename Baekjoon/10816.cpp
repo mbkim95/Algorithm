@@ -1,23 +1,27 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
+#include <unordered_map>
 using namespace std;
 
-int main() {
-	int n, m;
-	scanf("%d", &n);
-	vector<int> v(n);
-	for (int i = 0; i < n; i++)
-		scanf("%d", &v[i]);
-	scanf("%d", &m);
-	sort(v.begin(), v.end());
+int n, m;
+unordered_map<int, int> map;
 
-	for (int i = 0; i < m; i++) {
-		int tmp;
-		scanf("%d", &tmp);
-		auto sch = equal_range(v.begin(), v.end(), tmp);
-		printf("%d ", sch.second - sch.first);
-	}
-	printf("\n");
-	return 0;
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+
+  cin >> n;
+
+  int tmp;
+  for (int i = 0; i < n; i++) {
+    cin >> tmp;
+    map[tmp]++;
+  }
+
+  cin >> m;
+  for (int i = 0; i < m; i++) {
+    cin >> tmp;
+    cout << map[tmp] << ' ';
+  }
+  cout << '\n';
+  return 0;
 }
