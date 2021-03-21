@@ -1,41 +1,33 @@
-#include <cstdio>
+#include <iostream>
 using namespace std;
 
-int b[64][64];
-int n;
+int n, v[64][64];
 
-bool check(int x, int y, int size) {
-	int tmp = b[y][x];
-	for (int i = y; i < y + size; i++) {
-		for (int j = x; j < x + size; j++) {
-			if (tmp != b[i][j])
-				return false;
-		}
-	}
-	return true;
-}
-
-void solve(int x, int y, int size) {
-	if (check(x, y, size)) {
-		printf("%d", b[y][x]);
-		return;
-	}
-	else {
-		int s = size / 2;
-		printf("(");
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				solve(x + s * j, y + s * i, s);	
-			}
-		}
-		printf(")");
-	}
+void compress(int x, int y, int size) {
+  bool is_same = true;
+  for (int i = 0; i < size; i++) {
+    for (int j = 0; j < size; j++) {
+      if (v[y + i][x + j] != v[y][x]) {
+        is_same = false;
+        break;
+      }
+    }
+    if (!is_same) break;
+  }
+  if (is_same) printf("%d", v[y][x]);
+  else {
+    printf("(");
+    int s = size / 2;
+    for (int i = 0; i < 4; i++) compress(x + (i % 2) * s, y + (i / 2) * s, s);
+    printf(")");
+  }
 }
 
 int main() {
-	scanf("%d", &n);
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-			scanf("%1d", &b[i][j]);	
-	solve(0, 0, n);
+  scanf("%d", &n);
+  for (int i = 0; i < n; i++)
+    for (int j = 0; j < n; j++) scanf("%1d", &v[i][j]);
+  compress(0, 0, n);
+  printf("\n");
+  return 0;
 }
