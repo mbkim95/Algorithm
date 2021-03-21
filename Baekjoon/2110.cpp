@@ -1,41 +1,39 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
+int n, c, ans, x[200001];
+
 int main() {
-	int n, c;
-	cin >> n >> c;
-	vector<int> home(n);
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
 
-	for (int i = 0; i < n; i++) 
-		cin >> home[i];
-	
-	sort(home.begin(), home.end());
+  cin >> n >> c;
+  for (int i = 0; i < n; i++) cin >> x[i];
 
-	int left = 1;
-	int right = home[n - 1] - home[0];
-	int ans;
+  sort(x, x + n);
+  int l = 1, r = x[n - 1] - x[0];
 
-	while (left <= right) {
-		int mid = (left + right) / 2;
-		int start = home[0];
-		int cnt = 1;
+  while (l <= r) {
+    int mid = (l + r) / 2;
+    int start = x[0];
+    int cnt = 1;
 
-		for (int i = 1; i < n; i++) {
-			if (mid <= home[i] - start) {
-				cnt++;
-				start = home[i];
-			}
-		}
+    for (int i = 1; i < n; i++) {
+      int d = x[i] - start;
+      if (mid <= d) {
+        cnt++;
+        start = x[i];
+      }
+    }
 
-		if (cnt < c)
-			right = mid - 1;
-		else {
-			ans = mid;
-			left = mid + 1;
-		}
-	}
-	cout << ans << '\n';
-	return 0;
+    if (cnt < c)
+      r = mid - 1;
+    else {
+      ans = max(ans, mid);
+      l = mid + 1;
+    }
+  }
+  cout << ans << '\n';
+  return 0;
 }
