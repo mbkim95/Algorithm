@@ -3,8 +3,9 @@
 using namespace std;
 
 int main() {
-	int a, b, c;
-	cin >> a >> b >> c;
-	cout << (a + b + c) - max({ a, b, c }) - min({ a, b, c }) << '\n';
-	return 0;
+    int n[3];
+    cin >> n[0] >> n[1] >> n[2];
+    sort(n, n+3);
+    cout << n[1] << '\n';
+    return 0;
 }
