@@ -1,67 +1,52 @@
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 
-struct POINT{
-	int crash, x, y;
+struct point{
+  int x, y, cnt;
 };
 
-int n, m;
-vector<vector<vector<int>>> map, visited;
+int n, m, map[1001][1001], v[1001][1001][2];
+const int dx[] = {-1, 0, 1, 0}, dy[] = {0, -1, 0, 1};
 
-bool inRange(int x, int y) {
-	return (0 <= x && x < m) && (0 <= y && y < n);
-}
+int bfs(){
+  queue<point> q;
+  point p = {1, 1, 0};
+  q.push(p);
+  v[1][1][0] = 1;
 
-int bfs() {
-	queue<POINT> q;
-	POINT p = { 0, 0, 0};
-	q.push(p);
-	visited[0][0][0] = 1;
-	const int dx[4] = { -1, 1, 0, 0 }, dy[4] = { 0, 0, -1, 1 };
-	int distance = 1;
+  while(!q.empty()){
+    point cur = q.front();
+    q.pop();
 
-	while (!q.empty()) {
-		int size = q.size();
-		while (size--) {
-			POINT tmp = q.front();
-			q.pop();
+    if(cur.x == m && cur.y == n) return max(v[cur.y][cur.x][0], v[cur.y][cur.x][1]);
 
-			if (tmp.x == m - 1 && tmp.y == n - 1)
-				return distance;
-			for (int i = 0; i < 4; i++) {
-				int nextX = tmp.x + dx[i], nextY = tmp.y + dy[i];
-				if (inRange(nextX, nextY) && !visited[tmp.crash][nextY][nextX]) {
-					if (map[tmp.crash][nextY][nextX]) {
-						if (!tmp.crash) {
-							visited[1][nextY][nextX] = 1;
-							q.push(POINT{1, nextX, nextY});
-						}
-					}
-					else {
-						visited[tmp.crash][nextY][nextX] = 1;
-						q.push(POINT{ tmp.crash, nextX, nextY });
-					}
-				}
-			}
-		}
-		distance++;
-	}
-	return -1;
+    for(int i=0; i<4; i++){
+      int nx = cur.x + dx[i];
+      int ny = cur.y + dy[i];
+      int cnt = cur.cnt;
+
+      if(nx < 1 || nx > m || ny < 1 || ny > n) continue;
+      if(!v[ny][nx][cnt] && !map[ny][nx]){
+        v[ny][nx][cnt] = v[cur.y][cur.x][cnt] + 1;
+        point p = {nx, ny, cnt};
+        q.push(p);
+      }
+      if(cnt == 0 && !v[ny][nx][1] && map[ny][nx]){
+        v[ny][nx][1] = v[cur.y][cur.x][0] + 1;
+        point p = {nx, ny, 1};
+        q.push(p);
+      }
+    }
+  }
+  return -1;
 }
 
 int main() {
-	scanf("%d %d", &n, &m);
-	map = vector<vector<vector<int>>>(2, vector<vector<int>>(n, vector<int>(m, 0)));
-	visited = vector<vector<vector<int>>>(2, vector<vector<int>>(n, vector<int>(m, 0)));
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < m; j++) {
-			int tmp;
-			scanf("%1d", &tmp);
-			map[0][i][j] = map[1][i][j] = tmp;
-		}
-
-	printf("%d\n", bfs());
-	return 0;
+  scanf("%d %d", &n, &m);
+  for (int i = 1; i <= n; i++)
+    for (int j = 1; j <= m; j++) scanf("%1d", &map[i][j]);
+  printf("%d\n", bfs());
+  return 0;  
 }
