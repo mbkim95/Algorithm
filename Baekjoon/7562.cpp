@@ -1,59 +1,51 @@
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <cstring>
 using namespace std;
 
-int n, cur_x, cur_y, fin_x, fin_y;
-vector<vector<int>> map, visited;
-const int dx[8] = { 1, 2, 2, 1, -1, -2, -2, -1 }, dy[8] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+int l, m[301][301];
+pair<int, int> k, e;
+const int dx[] = {1, 2, 2, 1, -1, -2, -2, -1}, dy[] = {2, 1, -1, -2, -2, -1, 1, 2};
 
-bool inRange(int x, int y) {
-	return (0 <= x && x < n) && (0 <= y && y < n);
+int bfs(){
+  queue<pair<int, int> > q;
+  q.push(make_pair(k.first, k.second));
+  m[k.second][k.first] = 1;
+
+  while(!q.empty()){
+    pair<int, int> cur = q.front();
+    q.pop();
+
+    if(cur.first == e.first && cur.second == e.second) return m[e.second][e.first] - 1;
+
+    for(int i=0; i<8; i++){
+      int nx = cur.first + dx[i];
+      int ny = cur.second + dy[i];
+
+      if(nx < 0 || nx > l-1 || ny < 0 || ny > l-1) continue;
+      if(!m[ny][nx]){
+        q.push(make_pair(nx, ny));
+        m[ny][nx] = m[cur.second][cur.first] + 1;
+      }
+    }
+  }
+  return -1;
 }
 
-int bfs() {
-	queue<pair<int, int>> q;
-	q.push(make_pair(cur_x, cur_y));
-	visited[cur_y][cur_x] = 1;
-	int depth = 0;
+int main(){
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
 
-	while (!q.empty()) {
-		int size = q.size();
+  int t;
+  cin >> t;
 
-		for (int i = 0; i < size; i++) {
-			pair<int, int> tmp = q.front();
-			q.pop();
+  while(t--){
+    cin >> l;
+    cin >> k.first >> k.second;
+    cin >> e.first >> e.second;
 
-			if (tmp.first == fin_x && tmp.second == fin_y)
-				return depth;
-
-			for (int j = 0; j < 8; j++) {
-				int nextX = tmp.first + dx[j];
-				int nextY = tmp.second + dy[j];
-				if (inRange(nextX, nextY) && !visited[nextY][nextX]) {
-					visited[nextY][nextX] = 1;
-					q.push(make_pair(nextX, nextY));
-				}
-			}
-
-		}
-		depth++;
-	}
-	return -1;
-}
-
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(0);
-	int t;
-	cin >> t;
-	while (t--) {
-		cin >> n;
-		cin >> cur_x >> cur_y;
-		cin >> fin_x >> fin_y;
-		map = vector<vector<int>>(n, vector<int>(n, 0));
-		visited = vector<vector<int>>(n, vector<int>(n, 0));
-		cout << bfs() << '\n';
-	}
-	return 0;
+    memset(m, 0, sizeof(m));
+    cout << bfs() << '\n';
+  }
+  return 0;
 }
