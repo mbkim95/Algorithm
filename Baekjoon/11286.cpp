@@ -1,32 +1,33 @@
 #include <iostream>
 #include <queue>
-#include <cmath>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+int n, x;
 
-	priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
-	int n;
-	cin >> n;
-	for (int i = 0; i < n; i++) {
-		int tmp;
-		cin >> tmp;
-		if (tmp == 0) {
-			if (!q.empty()) {
-				cout << q.top().second << '\n';
-				q.pop();
-			}
-			else {
-				cout << 0 << '\n';
-			}
-		}
-		else {
-			q.push(make_pair(abs(tmp), tmp));
-		}
-	}
-	return 0;
+struct compare{
+  bool operator()(int a, int b){
+    if(abs(a) == abs(b)) return a < b;
+    return abs(a) > abs(b);
+  }
+};
+
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+
+  priority_queue<int, vector<int>, compare> pq;
+  cin >> n;
+  while (n--) {
+    cin >> x;
+    if (x == 0) {
+      if (pq.empty()) cout << "0\n";
+      else {
+        cout << -pq.top() << '\n';
+        pq.pop();
+      }
+    } else pq.push(-x);
+  }
+  return 0;
 }
