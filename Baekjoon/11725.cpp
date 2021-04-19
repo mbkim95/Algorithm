@@ -1,38 +1,33 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 int n;
-vector<bool> visited;
-vector<int>ans;
-vector<vector<int>>adj;
+vector<int> parent, adj[100001];
 
-void dfs(int here, int parent) {
-	visited[here] = true;
-	ans[here] = parent;
-	for (int i = 0; i < adj[here].size(); i++) {
-		int there = adj[here][i];
-		if (!visited[there])
-			dfs(there, here);
-	}
+void dfs(int cur) {
+  for (int next : adj[cur]) {
+	  if(parent[next] == 0) {
+      parent[next] = cur;
+      dfs(next);
+    }
+  }
 }
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	cin >> n;
-	adj = vector<vector<int>>(n + 1);
-	ans = vector<int>(n + 1);
-	visited = vector<bool>(n + 1, false);
-	for (int i = 0; i < n - 1; i++) {
-		int tmp1, tmp2;
-		cin >> tmp1 >> tmp2;
-		adj[tmp1].push_back(tmp2);
-		adj[tmp2].push_back(tmp1);
-	}
-	dfs(1, 1);
-	for (int i = 2; i <= n; i++)
-		cout << ans[i] << '\n';
-	return 0;
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+
+  cin >> n;
+  parent = vector<int>(n + 1);
+  for (int i = 0; i < n - 1; i++) {
+    int a, b;
+    cin >> a >> b;
+    adj[a].push_back(b);
+    adj[b].push_back(a);
+  }
+  dfs(1);
+  for(int i=2; i<=n; i++) cout << parent[i] << '\n';
+  return 0;
 }
