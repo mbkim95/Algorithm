@@ -3,58 +3,49 @@
 #include <vector>
 using namespace std;
 
-typedef pair<int, int> pr;
-int v, e, k;
-vector<vector<pr>> adj;
-vector<int> dist;
+int v, e, k, chk[20001];
+vector<pair<int, int> > adj[20001];
 
 void dijkstra() {
-	priority_queue<pr, vector<pr>, greater<pr>> pq;
-	pq.push(make_pair(0, k));
+  priority_queue<pair<int, int> > pq;
+  pq.push(make_pair(0, k));
+  chk[k] = 0;
 
-	while (!pq.empty()) {
-		int cost = pq.top().first;
-		int cur = pq.top().second;
-		pq.pop();
+  while (!pq.empty()) {
+    int cur = pq.top().second;
+    int cost = -pq.top().first;
+    pq.pop();
 
-		if (cost > dist[cur]) continue;
+    if(cost > chk[cur]) continue;
 
-		for (int i = 0; i < adj[cur].size(); i++) {
-			int next = adj[cur][i].first;
-			int next_cost = adj[cur][i].second;
-
-			if (dist[next] > dist[cur] + next_cost) {
-				dist[next] = dist[cur] + next_cost;
-				pq.push(make_pair(dist[next], next));
-			}
-		}
-	}
+    for (auto it : adj[cur]) {
+      int next = it.first;
+      int w = it.second;
+      if (chk[next] > cost + w) {
+        chk[next] = cost + w;
+        pq.push(make_pair(-chk[next], next));
+      }
+    }
+  }
 }
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
 
-	cin >> v >> e;
-	cin >> k;
-	adj = vector<vector<pr>>(v + 1);
-	dist = vector<int>(v + 1, 987654321);
-	dist[k] = 0;
+  cin >> v >> e;
+  cin >> k;
+  for (int i = 0; i < e; i++) {
+    int a, b, c;
+    cin >> a >> b >> c;
+    adj[a].push_back(make_pair(b, c));
+  }
 
-	for (int i = 0; i < e; i++) {
-		int a, b, c;
-		cin >> a >> b >> c;
-		adj[a].push_back(make_pair(b, c));
-	}
-
-	dijkstra();
-	
-	for (int i = 1; i <= v; i++) {
-		if (dist[i] == 987654321)
-			cout << "INF\n";
-		else
-			cout << dist[i] << '\n';
-	}
-	return 0;
+  fill(chk, chk + v + 1, 987654321);
+  dijkstra();
+  for (int i = 1; i <= v; i++) {
+    if (chk[i] == 987654321) cout << "INF\n";
+    else cout << chk[i] << '\n';
+  }
+  return 0;
 }
