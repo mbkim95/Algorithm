@@ -1,7 +1,15 @@
-#include <cstdio>
+#include <iostream>
+using namespace std;
 
 int main() {
-	char str[101];	
-	while (scanf("%10s", str) == 1)
-		printf("%s\n", str);
+  string str;
+  cin >> str;
+
+  int i = 0;
+  while (true) {
+    cout << str.substr(i, 10) << endl;
+    i += 10;
+    if (i > str.length() - 1) break;
+  }
+  return 0;
 }
