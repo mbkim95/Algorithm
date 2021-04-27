@@ -1,15 +1,13 @@
 #include <iostream>
 using namespace std;
 
-int dp[46];
+int n, fib[46];
 
-int main() {
-	int n;
-	cin >> n;
-	dp[0] = 0;
-	dp[1] = 1;
-	for (int i = 2; i <= n; i++) {
-		dp[i] = dp[i - 1] + dp[i - 2];
-	}
-	cout << dp[n] << '\n';
+int main(){
+  cin >> n;
+  fib[0] = 0;
+  fib[1] = 1;
+  for(int i=2; i<=n; i++) fib[i] = fib[i-1] + fib[i-2];
+  cout << fib[n] << '\n';
+  return 0;
 }
