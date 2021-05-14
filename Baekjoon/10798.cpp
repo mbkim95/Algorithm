@@ -1,24 +1,19 @@
 #include <iostream>
-#include <cstring>
 #include <algorithm>
+#include <cstring>
 using namespace std;
 
-char str[5][16];
+char c[5][16];
 
 int main() {
-
-	int len = 0;
-	for (int i = 0; i < 5; i++) {
-		scanf("%s", &str[i]);
-		len = max(len, (int)strlen(str[i]));
-	}
-	
-	for (int i = 0; i < len; i++) {
-		for (int j = 0; j < 5; j++) {
-			if (str[j][i] != ' ' && str[j][i] != '\0')
-				printf("%c", str[j][i]);
-		}
-	}
-	printf("\n");
-	return 0;
+  int len = 0;
+  for (int i = 0; i < 5; i++) {
+    scanf("%s", c[i]);
+    len = max(len, (int)strlen(c[i]));
+  }
+  for (int j = 0; j < len; j++)
+    for (int i = 0; i < 5; i++)
+      if (c[i][j] != '\0') cout << c[i][j];
+  cout << '\n';
+  return 0;
 }
