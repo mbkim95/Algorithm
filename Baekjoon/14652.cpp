@@ -1,9 +1,10 @@
 #include <iostream>
 using namespace std;
 
-int main(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    cout << k/m << ' ' << k%m << '\n';
-    return 0;
+int n, m, k;
+
+int main() {
+  cin >> n >> m >> k;
+  cout << k / m << ' ' << k % m << '\n';
+  return 0;
 }
