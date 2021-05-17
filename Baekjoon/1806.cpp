@@ -1,32 +1,30 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
+int n, s, l, r, num[100001];
+
 int main() {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
+  cin >> n >> s;
+  for (int i = 0; i < n; i++) cin >> num[i];
 
-	int n, s;
-	cin >> n >> s;
-	vector<int> num(n);
-	
-	for (int& i : num)
-		cin >> i;
+  l = r = 0;
+  int sum = num[l], ans = n + 1;
 
-	int start = 0, end = 0;
-	int sum = 0;
-	int ans = 100001;
-
-	while (true) {
-		if (sum >= s) {
-			ans = min(ans, end - start);
-			sum -= num[start++];
-		}
-		else if (end == n) break;
-		else sum += num[end++];
-	}
-	cout << (ans == 100001 ? 0 : ans) << '\n';
-	return 0;
-	
+  while (l <= r) {
+    if (r == n) break;
+    if (sum < s) {
+      r++;
+      sum += num[r];
+    } else {
+      ans = min(ans, r - l + 1);
+      sum -= num[l];
+      l++;
+    }
+  }
+  if (ans == n + 1)
+    cout << "0\n";
+  else
+    cout << ans << '\n';
+  return 0;
 }
