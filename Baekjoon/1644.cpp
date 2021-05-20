@@ -1,54 +1,42 @@
 #include <iostream>
 #include <vector>
+#include <cstring>
 #define MAX 4000000
 using namespace std;
 
 int n;
-int p[4000001];
-vector<int> prime;
-
-void pre_calc() {
-	fill(p, p + MAX + 1, true);
-	for (int i = 2; i * i <= MAX; i++) {
-		if (p[i]) {
-			int j = 2;
-			while (i * j <= MAX) {
-				p[i * j] = false;
-				j++;
-			}
-		}
-	}
-	for (int i = 2; i <= MAX; i++)
-		if (p[i])
-			prime.push_back(i);
-}
-
-int two_pointer() {
-	int ret = 0;
-	int s = 0;
-	int e = 0;
-	int sum = prime[0];
-	while (true) {
-		if (s == prime.size() || e == prime.size()) break;
-		else if (sum <= n) {
-			if (sum == n) ret++;
-			e++;
-			sum += prime[e];
-		}
-		else {
-			sum -= prime[s];
-			s++;
-		}
-	}
-	return ret;
-}
+bool is_prime[MAX + 1];
+vector<int> num;
 
 int main() {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
 
-	cin >> n;
-	pre_calc();
-	cout << two_pointer() << '\n';
-	return 0;
+  cin >> n;
+  memset(is_prime, true, sizeof(is_prime));
+  is_prime[1] = false;
+  for (int i = 2; i * i <= n; i++) {
+    if (is_prime[i]) {
+      for (int j = 2; i * j <= n; j++) {
+        is_prime[i * j] = false;
+      }
+    }
+  }
+
+  for (int i = 2; i <= n; i++)
+    if (is_prime[i]) num.push_back(i);
+
+  int l = 0, r = 0, ans = 0, sum = 0;
+  if(num.size() != 0) sum = num[l];
+
+  while (l <= r) {
+    if (r >= num.size()) break;
+    if (sum <= n) {
+      if (sum == n) ans++;
+      sum += num[++r];
+    } else
+      sum -= num[l++];
+  }
+  cout << ans << '\n';
+  return 0;
 }
