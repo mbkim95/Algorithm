@@ -1,18 +1,21 @@
 #include <iostream>
-#include <queue>
 using namespace std;
 
+int s[5], ans, idx = -1;
 int main() {
-	priority_queue<pair<int, int>> pq;
-	for (int i = 1; i <= 5; i++) {
-		int score = 0;
-		for (int j = 0; j < 4; j++) {
-			int tmp;
-			cin >> tmp;
-			score += tmp;
-		}
-		pq.push({ score, i });
-	}
-	cout << pq.top().second << ' ' << pq.top().first << '\n';
-	return 0;
+  for(int i=0; i<5; i++){
+    int sum = 0;
+    for(int j=0; j<4; j++){
+      int tmp;
+      cin >> tmp;
+      sum += tmp;
+    }
+    s[i] = sum;
+    if(ans < s[i]){
+      ans = s[i];
+      idx = i;
+    }
+  }
+  cout << idx + 1 << ' ' << ans << '\n';
+  return 0;
 }
