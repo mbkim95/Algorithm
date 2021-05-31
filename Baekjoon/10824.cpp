@@ -1,17 +1,11 @@
 #include <iostream>
-#include <string>
+#include <cmath>
+#include <cstring>
 using namespace std;
 
 int main() {
-	string s;
-	int num1, num2;
-    long long sum = 0;
-	
-	for (int i = 0; i < 2; i++) {
-		cin >> num1 >> num2;
-		s = to_string(num1) + to_string(num2);
-		sum += stoll(s);
-	}
-	cout << sum << '\n';
-	return 0;
+  string a, b, c, d;
+  cin >> a >> b >> c >> d;
+cout << (long long)(stoi(a) * pow(10, b.length()) + stoi(b) + stoi(c) * pow(10, d.length()) + stoi(d)) << '\n';
+  return 0;
 }
