@@ -1,45 +1,17 @@
 #include <iostream>
-#include <vector>
 using namespace std;
 
-int n, b, c;
-long long ans;
-vector<int>a;
-
-bool isFinish() {
-	for (int i = 0; i < n; i++) {
-		if (a[i] > 0)
-			return false;
-	}
-	return true;
-}
+int n, a[1000001], b, c;
 
 int main() {
-	cin >> n;
-	a = vector<int>(n);
-	for (int i = 0; i < n; i++)
-		cin >> a[i];
-	cin >> b >> c;
-
-	for (int i = 0; i < n; i++) {
-		a[i] -= b;
-		ans++;
-	}
-
-	while (!isFinish()) {
-		for (int i = 0; i < n; i++) {
-			if (a[i] > 0) {
-				if (a[i] % c == 0) {
-					ans += (a[i] / c);
-					a[i] = 0;
-				}
-				else {
-					ans += (a[i] / c + 1);
-					a[i] = -1;
-				}
-			}
-		}
-	}
-	cout << ans << '\n';
-	return 0;
+  cin >> n;
+  for (int i = 0; i < n; i++) cin >> a[i];
+  cin >> b >> c;
+  long long sum = 0;
+  for(int i=0; i<n; i++) {
+    sum += 1;
+    if(a[i] - b > 0) sum += ((a[i] - b) % c == 0 ? (a[i] - b) / c : (a[i] - b) / c + 1);
+  }
+  cout << sum << '\n';
+  return 0;
 }
