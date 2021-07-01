@@ -1,26 +1,21 @@
 #include <iostream>
-#include <vector>
 using namespace std;
 
+int n, m, a[10001], ans, l, r;
+
 int main() {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
+  cin >> n >> m;
+  for (int i = 0; i < n; i++) cin >> a[i];
 
-	int n, m;
-	int s = 0, e = 0;
-	cin >> n >> m;
-	vector<int> num(n);
-	for (int i = 0; i < n; i++)
-		cin >> num[i];
-
-	int ans = 0;
-	int sum = 0;
-	while (true) {
-		if (sum >= m) sum -= num[s++];
-		else if (e == n) break;
-		else sum += num[e++];
-		if (sum == m) ans++;
-	}
-	cout << ans << '\n';
-	return 0;
+  long long sum = a[l];
+  while(l <= r) {
+    if(r == n) break;
+    if(sum <= m || l == r) {
+      if(sum == m) ans++;
+      sum += a[++r];
+    }
+    else if(sum > m) sum -= a[l++];
+  }
+  cout << ans << '\n';
+  return 0;
 }
