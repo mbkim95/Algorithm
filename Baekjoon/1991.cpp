@@ -1,81 +1,42 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
-#include <algorithm>
 using namespace std;
 
-int n, size;
-vector<char> tree;
+int n;
+vector<char> node[26];
 
-int findNode(char value){
-	for (int i = 0; i <= size; i++) {
-		if (tree[i] == value)
-			return i;
-	}
-	return -1;
-}
-
-void insertNode(char value, char left, char right) {
-	int idx = findNode(value);
-	if (left != '.') {
-		tree[2 * idx + 1] = left;
-		size = max(size, 2 * idx + 1);
-	}
-	if (right != '.') {
-		tree[2 * idx + 2] = right;
-		size = max(size, 2 * idx + 2);
+void pre_order(int cur) {
+	cout << (char) (cur + 'A');
+	if(node[cur].size() > 0) {
+		if(node[cur][0] != '.') pre_order(node[cur][0] - 'A');
+		if(node[cur][1] != '.') pre_order(node[cur][1] - 'A');
 	}
 }
 
-void preOrder(int idx) {
-	int left = 2 * idx + 1;
-	int right = 2 * idx + 2;
-	cout << tree[idx];
-	if (tree[left] != '.')
-		preOrder(left);
-	if (tree[right] != '.')
-		preOrder(right);	
+void in_order(int cur) {
+	if(node[cur].size() > 0 && node[cur][0] != '.') in_order(node[cur][0] - 'A');
+	cout << (char) (cur + 'A');
+	if(node[cur].size() > 0 && node[cur][1] != '.') in_order(node[cur][1] - 'A');
 }
 
-void inOrder(int idx) {
-	int left = 2 * idx + 1;
-	int right = 2 * idx + 2;
-	if (tree[left] != '.')
-		inOrder(left);
-	cout << tree[idx];
-	if (tree[right] != '.')
-		inOrder(right);
-}
-
-void postOrder(int idx) {
-	int left = 2 * idx + 1;
-	int right = 2 * idx + 2;
-	if (tree[left] != '.')
-		postOrder(left);
-	if (tree[right] != '.')
-		postOrder(right);
-	cout << tree[idx];
-}
-
-void solve() {
-	preOrder(0);
-	cout << '\n';
-	inOrder(0);
-	cout << '\n';
-	postOrder(0);
-	cout << '\n';
+void post_order(int cur) {
+	if(node[cur].size() > 0 && node[cur][0] != '.') post_order(node[cur][0] - 'A');
+	if(node[cur].size() > 0 && node[cur][1] != '.') post_order(node[cur][1] - 'A');
+	cout << (char) (cur + 'A');
 }
 
 int main() {
 	cin >> n;
-	tree = vector<char>(pow(2, 26) - 1, '.');
-	tree[0] = 'A';
-	size++;
-	for (int i = 0; i < n; i++) {
-		char root, left, right;
-		cin >> root >> left >> right;
-		insertNode(root, left, right);
+	for(int i=0; i<n; i++) {
+		char a, b, c;
+		cin >> a >> b >> c;
+		node[a - 'A'].push_back(b);
+		node[a - 'A'].push_back(c);
 	}
-	solve();
-	return 0;
+	pre_order(0);
+	cout << '\n';
+	in_order(0);
+	cout << '\n';
+	post_order(0);
+	cout << '\n';
 }
