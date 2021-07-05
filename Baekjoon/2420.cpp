@@ -1,10 +1,10 @@
 #include <iostream>
-#include <algorithm>
+#include <cmath>
 using namespace std;
 
-int main(){
-    long long n, m;
-    cin >> n >> m;
-    cout << abs(n - m) << '\n';
-    return 0;
+int main() {
+  long long n, m, ans;
+  cin >> n >> m;
+  ans = n - m;
+  cout << abs(ans) << '\n';
 }
