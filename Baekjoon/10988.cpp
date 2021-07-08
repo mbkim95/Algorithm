@@ -1,21 +1,20 @@
 #include <iostream>
-#include <string>
 using namespace std;
 
-bool isPalindrome(string str) {
-	int s = 0, e = str.length() - 1;
-	while (s < e) {
-		if (str[s] != str[e])
-			return false;
-		s++;
-		e--;
-	}
-	return true;
-}
-
 int main() {
-	string str;
-	cin >> str;
-	cout << isPalindrome(str) << '\n';
-	return 0;
+  string s;
+  cin >> s;
+  int l = 0, r = s.length() - 1;
+  bool is_right = true;
+  while(l < r) {
+    if(s[l] != s[r]) {
+      is_right = false;
+      break;
+    }
+    l++;
+    r--;
+  }
+  if(is_right) cout << "1\n";
+  else cout << "0\n";
+  return 0;
 }
