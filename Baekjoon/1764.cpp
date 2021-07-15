@@ -1,35 +1,23 @@
 #include <iostream>
+#include <vector>
 #include <map>
 using namespace std;
 
 int n, m;
+map<string, int> dict;
+vector<string> ans;
 
 int main() {
-	cin >> n >> m;
-	map<string, int> d;
-
-	for (int i = 1; i <= n; i++) {
-		string str;
-		cin >> str;
-		d[str]++;
-	}
-	for (int i = 1; i <= m; i++) {
-		string str;
-		cin >> str;
-		d[str]++;
-	}
-
-	int ans = 0;
-	for (auto p : d) {
-		if (p.second == 2)
-			ans++;
-	}
-
-	cout << ans << '\n';
-
-	for (auto p : d) {
-		if (p.second == 2) {
-			cout << p.first << '\n';
-		}
-	}
+  cin >> n >> m;
+  for(int i=0; i<n+m; i++) {
+    string name;
+    cin >> name;
+    dict[name]++;
+  }
+  for(auto it : dict) {
+    if(it.second > 1) ans.push_back(it.first);
+  }
+  cout << ans.size() << '\n';
+  for(auto it : ans) cout << it << '\n';
+  return 0;
 }
