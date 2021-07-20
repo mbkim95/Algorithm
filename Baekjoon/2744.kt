@@ -1,0 +1,1 @@
+fun main() = readLine()!!.forEach { print(if (it in 'A'..'Z') it.lowercase() else it.uppercase()) }
