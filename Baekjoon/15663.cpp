@@ -1,42 +1,38 @@
-#include <iostream>
 #include <algorithm>
-#include <unordered_set>
+#include <iostream>
+#include <set>
+#include <vector>
 using namespace std;
 
-int n, m;
-int num[10];
-bool chk[10];
-unordered_set<string> chk_set;
+int n, m, num[8], chk[8];
+vector<int> ans;
+set<string> s;
 
-void dfs(int cnt, string s) {
-	if (cnt == m) {
-		if (chk_set.find(s) == chk_set.end()) {
-			cout << s << '\n';
-			chk_set.insert(s);
-		}
-		return;
-	}
+void dfs(int idx) {
+  if (ans.size() == m) {
+    string tmp = "";
+    for (int i : ans) tmp += (to_string(i) + " ");
+    if (s.find(tmp) == s.end()) {
+      cout << tmp << '\n';
+      s.insert(tmp);
+    }
+    return;
+  }
 
-	for (int i = 0; i < n; i++) {
-		if (!chk[i]) {
-			string tmp = s + to_string(num[i]);
-			tmp += ' ';
-			chk[i] = true;
-			dfs(cnt + 1, tmp);
-			chk[i] = false;
-		}
-	}
+  for (int i = 0; i < n; i++) {
+    if(chk[i]) continue;
+    chk[i] = 1;
+    ans.push_back(num[i]);
+    dfs(i);
+    ans.pop_back();
+    chk[i] = 0;
+  }
 }
 
 int main() {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
-
-	cin >> n >> m;
-	for (int i = 0; i < n; i++)
-		cin >> num[i];
-	
-	sort(num, num + n);
-	dfs(0, "");
-	return 0;
+  cin >> n >> m;
+  for (int i = 0; i < n; i++) cin >> num[i];
+  sort(num, num + n);
+  dfs(-1);
+  return 0;
 }
