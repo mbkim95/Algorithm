@@ -1,32 +1,21 @@
-#include <iostream>
-#include <cstring>
 #include <algorithm>
+#include <iostream>
 using namespace std;
 
-int n, m;
-int b[1001][1001], dp[1001][1001];
-int dx[3] = { 0, 1, 1 }, dy[3] = { 1, 0, 1 };
-
-int solve(int y, int x) {
-	if (y > n || x > m)
-		return 0;
-
-	int& ret = dp[y][x];
-
-	if(ret != -1)
-		return ret;
-
-	for (int i = 0; i < 3; i++) {
-		ret = max(ret, solve(y + dy[i], x + dx[i]) + b[y][x]);
-	}
-	return ret;
-}
+int n, m, b[1001][1001], dp[1001][1001];
 
 int main() {
-	cin >> n >> m;
-	for (int i = 1; i <= n; i++)
-		for (int j = 1; j <= m; j++)
-			cin >> b[i][j];
-	memset(dp, -1, sizeof(dp));
-	cout << solve(1, 1) << '\n';
+  cin >> n >> m;
+  for (int i = 1; i <= n; i++)
+    for (int j = 1; j <= m; j++) cin >> b[i][j];
+
+  dp[1][1] = b[1][1];
+  for (int i = 2; i <= n; i++) dp[i][1] = dp[i - 1][1] + b[i][1];
+  for (int i = 2; i <= m; i++) dp[1][i] = dp[1][i - 1] + b[1][i];
+  for (int i = 2; i <= n; i++)
+    for (int j = 2; j <= m; j++)
+      dp[i][j] =
+          max(dp[i - 1][j], max(dp[i][j - 1], dp[i - 1][j - 1])) + b[i][j];
+  cout << dp[n][m] << '\n';
+  return 0;
 }
