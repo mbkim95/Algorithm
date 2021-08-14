@@ -2,25 +2,23 @@
 using namespace std;
 
 int main() {
-	while (true) {
-		string tmp;
-		cin >> tmp;
-		if (tmp == "0") break;
-		int len = tmp.length();
-		int left = 0;
-		int right = len - 1;
-		bool is_palindrome = true;
-		while (left <= right) {
-			if (tmp[left] != tmp[right]) {
-				cout << "no\n";
-				is_palindrome = false;
-				break;
-			}
-			left++;
-			right--;
-		}
-		if (is_palindrome)
-			cout << "yes\n";
-	}
-	return 0;
+  while (true) {
+    string num;
+    cin >> num;
+    if (num == "0") break;
+
+    int s = 0, e = num.length() - 1;
+    bool is_palindrome = true;
+    while(s < e) {
+      if(num[s] != num[e]){
+        is_palindrome = false;
+        break;
+      }
+      s++;
+      e--;
+    }
+    if(is_palindrome) cout << "yes\n";
+    else cout << "no\n";
+  }
+  return 0;
 }
