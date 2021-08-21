@@ -1,33 +1,27 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-int num[1001];
-
-void precalc() {
-	int idx = 1;
-	int cnt = 1;
-	while (idx <= 1000) {
-		for (int i = 0; i < cnt; i++) {
-			num[idx] = cnt;
-			idx++;
-
-			if (idx == 1001) return;
-		}
-		cnt++;
-	}
-}
-
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+  int a, b;
+  cin >> a >> b;
+  int cur = 1;
+  vector<int> num;
 
-	precalc();
-	int a, b;
-	cin >> a >> b;
-	int ans = 0;
-	for (int i = a; i <= b; i++) 
-		ans += num[i];
-	cout << ans << '\n';
-	return 0;
+  while (true) {
+    bool end = false;
+    for (int i = 0; i < cur; i++) {
+      if (num.size() == 1000) {
+        end = true;
+        break;
+      }
+      num.push_back(cur);
+    }
+    cur++;
+    if (end) break;
+  }
+  int sum = 0;
+  for (int i = a - 1; i <= b - 1; i++) sum += num[i];
+  cout << sum << '\n';
+  return 0;
 }
