@@ -1,101 +1,70 @@
+#include <algorithm>
 #include <iostream>
 #include <queue>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
-int n, m;
-vector<vector<int>> map;
-queue<pair<int, int>> Q;
-vector<pair<int, int>> cand;
-const int dx[] = { -1, 0, 1, 0 }, dy[] = { 0, -1, 0, 1 };
-
-bool inRange(int x, int y) {
-	return (0 <= x && x < m) && (0 <= y && y < n);
-}
-
-bool isFinished(vector<vector<int>>& map) {
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < m; j++)
-			if (!map[i][j])
-				return false;
-	return true;
-}
-
-int getCount(vector<vector<int>>& map) {
-	int ret = 0;
-
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			if (map[i][j] == 0)
-				ret++;
-		}
-	}
-	return ret;
-}
-
+int n, m, ans, b[8][8], b2[8][8];
+vector<pair<int, int> > blank, tmp, virus;
+const int dx[] = {-1, 0, 1, 0}, dy[] = {0, -1, 0, 1};
 
 int bfs() {
-	vector<vector<int>> m = map;
-	queue<pair<int, int>> q = Q;
+  for (int i = 0; i < n; i++)
+    for (int j = 0; j < m; j++) b2[i][j] = b[i][j];
 
-	while (!q.empty()) {
-		pair<int, int> tmp = q.front();
-		q.pop();
+  for (int i = 0; i < 3; i++) b2[tmp[i].second][tmp[i].first] = 1;
 
-		if (isFinished(m))
-			break;
+  queue<pair<int, int> > q;
+  for (int i = 0; i < virus.size(); i++) q.push(virus[i]);
 
-		for (int i = 0; i < 4; i++) {
-			int nextX = tmp.first + dx[i];
-			int nextY = tmp.second + dy[i];
+  while (!q.empty()) {
+    pair<int, int> cur = q.front();
+    q.pop();
 
-			if (inRange(nextX, nextY) && !m[nextY][nextX]) {
-				q.push(make_pair(nextX, nextY));
-				m[nextY][nextX] = 2;
-			}
-		}
-	}
-	return getCount(m);
+    for (int i = 0; i < 4; i++) {
+      int nx = cur.first + dx[i];
+      int ny = cur.second + dy[i];
+
+      if (nx < 0 || nx > m - 1 || ny < 0 || ny > n - 1 || b2[ny][nx] != 0)
+        continue;
+
+      q.push(make_pair(nx, ny));
+      b2[ny][nx] = 2;
+    }
+  }
+
+  int cnt = 0;
+  for (int i = 0; i < n; i++)
+    for (int j = 0; j < m; j++)
+      if (b2[i][j] == 0) cnt++;
+  return cnt;
 }
 
-void solve() {
-	int ans = 0;
-	pair<int, int> w1, w2, w3;
-	for (int i = 0; i < cand.size()-2; i++) {
-		w1 = cand[i];
-		map[w1.second][w1.first] = 1;
-		for (int j = i+1; j < cand.size()-1; j++) {
-			w2 = cand[j];
-			map[w2.second][w2.first] = 1;
-			for (int k = j+1; k < cand.size(); k++) {
-				w3 = cand[k];
-				map[w3.second][w3.first] = 1;
-				ans = max(ans, bfs());
-				map[w3.second][w3.first] = 0;
-			}
-			map[w2.second][w2.first] = 0;
-		}
-		map[w1.second][w1.first] = 0;
-	}
-	cout << ans << '\n';
+void dfs(int idx) {
+  if (tmp.size() == 3) {
+    ans = max(ans, bfs());
+    return;
+  }
+
+  for (int i = idx + 1; i < blank.size(); i++) {
+    tmp.push_back(blank[i]);
+    dfs(i);
+    tmp.pop_back();
+  }
 }
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-
-	cin >> n >> m;
-	map = vector<vector<int>>(n, vector<int>(m, 0));
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			cin >> map[i][j];
-			if (map[i][j] == 0)
-				cand.push_back(make_pair(j, i));
-			if (map[i][j] == 2)
-				Q.push(make_pair(j, i));
-		}
-	}
-	solve();
-	return 0;
+  cin >> n >> m;
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      cin >> b[i][j];
+      if (b[i][j] == 0)
+        blank.push_back(make_pair(j, i));
+      else if (b[i][j] == 2)
+        virus.push_back(make_pair(j, i));
+    }
+  }
+  dfs(-1);
+  cout << ans << '\n';
+  return 0;
 }
