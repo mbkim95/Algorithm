@@ -1,50 +1,20 @@
 #include <iostream>
-#include <vector>
-#include <cmath>
 using namespace std;
 
-vector<vector<int>> data;
-
-void precalc() {
-	for (int i = 0; i <= 10; i++) {
-		data[i].push_back(0);
-		for (int j = 1; j <= 4; j++) {
-			int tmp = (int)pow(i, j) % 10;
-			if (tmp == 0)
-				tmp = 10;
-			bool find = false;
-			for (int k = 1; k < data[i].size(); k++) {
-				if (data[i][k] == tmp) {
-					find = true;
-					break;
-				}
-			}
-			if (find)
-				break;
-			else
-				data[i].push_back(tmp);
-		}
-	}
-}
+const int num[10][4] = {{1, 1, 1, 1}, {2, 4, 8, 6}, {3, 9, 7, 1},
+                        {4, 6, 4, 6}, {5, 5, 5, 5}, {6, 6, 6, 6},
+                        {7, 9, 3, 1}, {8, 4, 2, 6}, {9, 1, 9, 1}};
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int t;
-	cin >> t;
-	data = vector<vector<int>>(11);
-	precalc();
-
-	while (t--) {
-		int a, b;
-		cin >> a >> b;
-		a %= 10;
-		if (b % (data[a].size() - 1) == 0)
-			b = (data[a].size() - 1);
-		else
-			b %= (data[a].size() - 1);
-		cout << data[a][b] << '\n';
-	}
-	return 0;
+  int t;
+  cin >> t;
+  while (t--) {
+    int a, b;
+    cin >> a >> b;
+    int tmp = a % 10;
+    int r = b % 4 == 0 ? 3 : b % 4 - 1;
+    if (tmp == 0) cout << "10\n";
+    else cout << num[tmp - 1][r] << '\n';
+  }
+  return 0;
 }
