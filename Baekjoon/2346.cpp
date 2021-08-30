@@ -1,50 +1,34 @@
-#include <iostream>
-#include <list>
+#include<iostream>
+#include<vector>
 using namespace std;
 
 int main() {
 	int n;
-	ios_base::sync_with_stdio(false);
-	list<pair<int, int>> l;
 	cin >> n;
+	vector<pair<int, int>> v;
 
 	for (int i = 1; i <= n; i++) {
-		int tmp;
-		cin >> tmp;
-		l.push_back(make_pair(tmp, i));
+		int num;
+		cin >> num;
+		v.push_back(make_pair(i, num));
 	}
+	while (v.empty() != true) {
+		cout << v.front().first << ' ';
+		int a = v.front().second;
+		v.erase(v.begin());
 
-	auto it = l.begin();
-	for (int i = 0; i < n-1; i++) {
-		cout << (it->second) << ' ';
-		int step = it->first;
-		if (step > 0) {
-			auto temp = it;
-			temp++;
-			if (temp == l.end())
-				temp = l.begin();
-			l.erase(it);
-			it = temp;
-			for (int i = 1; i < step; i++) {
-				it++;
-				if (it == l.end())
-					it = l.begin();
+		if (a < 0) {
+			for (int j = 0; j < abs(a); j++) {
+				v.insert(v.begin(), v.back());
+				v.erase(v.end());
 			}
 		}
-		else if (step < 0) {
-			step = -step;
-			auto temp = it;
-			if (temp == l.begin())
-				temp = l.end();
-			temp--;
-			l.erase(it);
-			it = temp;
-			for (int i = 1; i < step; i++) {
-				it--;
-				if (it == l.begin())
-			 		it = l.end();
+		else {
+			for (int j = 0; j < a - 1; j++) {
+				v.push_back(v.front());
+				v.erase(v.begin());
 			}
 		}
-	}	
-	cout << it->second << '\n';
+	}
+	return 0;
 }
