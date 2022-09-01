@@ -2,9 +2,8 @@
 using namespace std;
 
 int main() {
-	int a, b, c;
-	cin >> a >> b >> c;
-	while (c--) a ^= b;
-	cout << a << '\n';
-	return 0;
+    int a, b, c;
+    cin >> a >> b >> c;
+    cout << (c % 2 ? a ^ b : a) << '\n';
+    return 0;
 }
