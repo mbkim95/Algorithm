@@ -1,0 +1,1 @@
+fun main()=repeat(readLine()!!.toInt()){println(if(readLine()!!.length in 6..9)"yes " else "no")}
