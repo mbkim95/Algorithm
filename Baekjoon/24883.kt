@@ -1,0 +1,1 @@
+fun main()=print("Naver ${if(readLine()!!.lowercase()=="n")"D2" else "Whale"}")
