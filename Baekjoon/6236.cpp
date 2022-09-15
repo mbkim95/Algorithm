@@ -1,58 +1,46 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
 using namespace std;
 
-int n, m;
-int money[100001];
+int n, m, s[100001];
 
-bool is_possible(int mid) {
-	int cnt = 1;
-	int sum = mid;
+int count(int k) {
+    int cnt = 1;
+    int total = k;
 
-	for (int i = 0; i < n; i++) {
-		if (mid < money[i]) return false;
-
-		if (sum - money[i] < 0) {
-			sum = mid;
-			cnt++;
-		}
-		sum -= money[i];
-	}
-	return cnt <= m;
+    for (int i = 1; i <= n; i++) {
+        if (k < s[i]) return -1;
+        if (total < s[i]) {
+            cnt++;
+            total = k;
+        }
+        total -= s[i];
+    }
+    return cnt;
 }
 
-int binary_search(int r) {
-	int left = 1;
-	int right = r;
-	int ans = 987654321;
+int binary_search() {
+    int left = 1, right = 1000000000, ret = 0;
 
-	while (left <= right) {
-		int mid = (left + right) / 2;		
-			
-		if (is_possible(mid)) {
-			right = mid - 1;
-			ans = min(ans, mid);
-		}
-		else {
-			left = mid + 1;
-		}
-	}
-	return ans;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+
+        int c = count(mid);
+        if (c == -1 || c > m) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+            ret = mid;
+        }
+    }
+    return ret;
 }
 
 int main() {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
-	cin >> n >> m;
-
-	int sum = 0;
-	for (int i = 0; i < n; i++) {
-		cin >> money[i];
-		sum += money[i];
-	}
-
-	cout << binary_search(sum) << '\n';
-	return 0;
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) cin >> s[i];
+    cout << binary_search() << '\n';
+    return 0;
 }
