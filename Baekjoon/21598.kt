@@ -1,0 +1,1 @@
+fun main()=repeat(readLine()!!.toInt()){println("SciComLove")}
