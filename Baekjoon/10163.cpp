@@ -1,25 +1,24 @@
 #include <iostream>
 using namespace std;
 
-int map[103][103];
-int cnt[103];
+int n, b[1002][1002], ans[101];
 
 int main() {
-    int n;    
     cin >> n;
-    for (int t = 1; t <= n; t++) {
+    for(int p=1; p<=n; p++) {
         int x, y, w, h;
         cin >> x >> y >> w >> h;
-        for (int i = x; i < x + w; i++) {
-            for (int j = y; j < y + h; j++)
-                map[i][j] = t;
+        for(int i=y; i<y+h; i++) {
+            for(int j=x; j<x+w; j++) {
+                b[i][j] = p;
+            }
         }
     }
-    
-    for (int i = 0; i <= 100; i++)
-        for (int j = 0; j <= 100; j++)
-            cnt[map[i][j]]++;
-    for (int i = 1; i <= n; i++)
-        cout << cnt[i] << '\n';
+    for(int i=0; i<=1001; i++) {
+        for(int j=0; j<=1001; j++) {
+            if(b[i][j] > 0) ans[b[i][j]]++;
+        }
+    }
+    for(int i=1; i<=n; i++) cout << ans[i] << '\n';
     return 0;
 }
