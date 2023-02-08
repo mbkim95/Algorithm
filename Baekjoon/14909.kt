@@ -1,0 +1,1 @@
+fun main()=print(readln().split(" ").map{it.toInt()}.count{it>0})
